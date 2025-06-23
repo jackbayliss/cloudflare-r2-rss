@@ -22,7 +22,7 @@ jobs:
         run: pip install requests feedgen python-dateutil
 
       - name: Run RSS generator
-        run: python scripts/generate_r2_rss.py
+        run: python cloudflare-rss.py
 
       - name: Commit RSS feed
         run: |
