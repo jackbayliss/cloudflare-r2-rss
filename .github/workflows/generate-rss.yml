@@ -1,0 +1,33 @@
+name: Generate R2 Incident RSS
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests feedgen python-dateutil
+
+      - name: Run RSS generator
+        run: python scripts/generate_r2_rss.py
+
+      - name: Commit RSS feed
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add r2-incidents.xml
+          git commit -m "Update R2 incident RSS feed" || echo "No changes to commit"
+          git push
