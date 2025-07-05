@@ -14,10 +14,12 @@ def fetch_r2_incidents():
     for incident in incidents:
         name = incident.get("name", "")
         updates = incident.get("incident_updates", [])
+        status = incident.get("status", "")
         for update in updates:
-            body_texts = " ".join(update.get("body", ""))
-        if "r2" in name.lower() or "r2" in body_texts.lower():
-            r2_incidents.append(incident)
+            if status != 'resolved':
+                body_texts = " ".join(update.get("body", ""))
+                if "r2" in name.lower() or "r2" in body_texts.lower():
+                    r2_incidents.append(incident)
     return r2_incidents
 
 def generate_rss(incidents):
